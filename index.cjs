@@ -1,4 +1,5 @@
-// @ts-self-types="./index.d.ts"
+'use strict';
+
 /**
  * @fileoverview defineConfig helper
  * @author Nicholas C. Zakas
@@ -576,4 +577,5 @@ function globalIgnores(ignorePatterns, name) {
 	};
 }
 
-export { defineConfig, globalIgnores };
+exports.defineConfig = defineConfig;
+exports.globalIgnores = globalIgnores;

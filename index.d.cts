@@ -2,11 +2,11 @@ export type Config = import("@eslint/core").ConfigObject;
 export type LegacyConfig = import("@eslint/core").LegacyConfigObject;
 export type Plugin = import("@eslint/core").Plugin;
 export type RuleConfig = import("@eslint/core").RuleConfig;
-export type ExtendsElement = import("./types.ts").ExtendsElement;
-export type SimpleExtendsElement = import("./types.ts").SimpleExtendsElement;
-export type ConfigWithExtends = import("./types.ts").ConfigWithExtends;
-export type InfiniteConfigArray = import("./types.ts").InfiniteArray<Config>;
-export type ConfigWithExtendsArray = import("./types.ts").ConfigWithExtendsArray;
+export type ExtendsElement = import("./types.cts").ExtendsElement;
+export type SimpleExtendsElement = import("./types.cts").SimpleExtendsElement;
+export type ConfigWithExtends = import("./types.cts").ConfigWithExtends;
+export type InfiniteConfigArray = import("./types.cts").InfiniteArray<Config>;
+export type ConfigWithExtendsArray = import("./types.cts").ConfigWithExtendsArray;
 /**
  * Helper function to define a config array.
  * @param {ConfigWithExtendsArray} args The arguments to the function.
