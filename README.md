@@ -1,85 +1,40 @@
-# @rolldown/pluginutils
+# Acorn-JSX
 
-A utility library for building flexible, composable filter expressions that can be used in plugin hook filters of Rolldown/Vite/Rollup/Unplugin plugins.
+[![Build Status](https://travis-ci.org/acornjs/acorn-jsx.svg?branch=master)](https://travis-ci.org/acornjs/acorn-jsx)
+[![NPM version](https://img.shields.io/npm/v/acorn-jsx.svg)](https://www.npmjs.org/package/acorn-jsx)
 
-## Installation
+This is plugin for [Acorn](http://marijnhaverbeke.nl/acorn/) - a tiny, fast JavaScript parser, written completely in JavaScript.
 
-```sh
-pnpm add @rolldown/pluginutils
-```
+It was created as an experimental alternative, faster [React.js JSX](http://facebook.github.io/react/docs/jsx-in-depth.html) parser. Later, it replaced the [official parser](https://github.com/facebookarchive/esprima) and these days is used by many prominent development tools.
+
+## Transpiler
+
+Please note that this tool only parses source code to JSX AST, which is useful for various language tools and services. If you want to transpile your code to regular ES5-compliant JavaScript with source map, check out [Babel](https://babeljs.io/) and [Buble](https://buble.surge.sh/) transpilers which use `acorn-jsx` under the hood.
 
 ## Usage
 
-### Simple Filters
+Requiring this module provides you with an Acorn plugin that you can use like this:
 
-```ts
-import {
-  exactRegex,
-  makeIdFiltersToMatchWithQuery,
-  prefixRegex,
-} from '@rolldown/pluginutils';
-
-// Match exactly 'foo.js'
-const filter = exactRegex('foo.js');
-
-// Match any id starting with 'lib/'
-const prefix = prefixRegex('lib/');
-
-// Match ids with query params (e.g. 'foo.js?bar')
-const idFilters = makeIdFiltersToMatchWithQuery(['**/*.js', /\.ts$/]);
-
-// Usage in a plugin to define a hook filter
-const myPlugin = {
-  resolveId: {
-    filter: {
-      id: [exactRegex('MY_ID_TO_CHECK'), /some-other-regex/],
-    },
-    handler(id) {
-      // Your code here
-    },
-  },
-};
+```javascript
+var acorn = require("acorn");
+var jsx = require("acorn-jsx");
+acorn.Parser.extend(jsx()).parse("my(<jsx/>, 'code');");
 ```
 
-### Composable Filters
+Note that official spec doesn't support mix of XML namespaces and object-style access in tag names (#27) like in `<namespace:Object.Property />`, so it was deprecated in `acorn-jsx@3.0`. If you still want to opt-in to support of such constructions, you can pass the following option:
 
-> [!WARNING] Composable filters are not yet supported in Vite, Rolldown-Vite or unplugin. They can be used in Rolldown plugins only.
-
-```ts
-import { and, id, include, moduleType, query } from '@rolldown/pluginutils';
-
-// Build a filter expression
-const filterExpr = and(
-  id(/\.ts$/),
-  moduleType('ts'),
-  query('foo', true),
-);
-
-// Usage in a plugin to define a hook filter
-const myPlugin = {
-  transform: {
-    filter: [include(filterExpr)],
-    handler(code, id, options) {
-      // Your code here
-    },
-  },
-};
+```javascript
+acorn.Parser.extend(jsx({ allowNamespacedObjects: true }))
 ```
 
-## API Reference
+Also, since most apps use pure React transformer, a new option was introduced that allows to prohibit namespaces completely:
 
-### Simple Filters
+```javascript
+acorn.Parser.extend(jsx({ allowNamespaces: false }))
+```
 
-- `exactRegex(str: string, flags?: string): RegExp` — Matches the exact string.
-- `prefixRegex(str: string, flags?: string): RegExp` — Matches values with the given prefix.
-- `makeIdFiltersToMatchWithQuery(input: string | RegExp | (string | RegExp)[]): string | RegExp | (string | RegExp)[]` — Adapts filters to match ids with query params.
+Note that by default `allowNamespaces` is enabled for spec compliancy.
 
-### Composable Filters
+## License
 
-- `and(...exprs)` / `or(...exprs)` / `not(expr)` — Logical composition of filter expressions.
-- `id(pattern, params?)` — Filter by id (string or RegExp).
-- `moduleType(type)` — Filter by module type (e.g. 'js', 'tsx', or 'json').
-- `code(pattern)` — Filter by code content.
-- `query(key, pattern)` — Filter by query parameter.
-- `include(expr)` / `exclude(expr)` — Top-level include/exclude wrappers.
-- `queries(obj)` — Compose multiple query filters.
+This plugin is issued under the [MIT license](./LICENSE).
