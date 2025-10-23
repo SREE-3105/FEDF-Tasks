@@ -4,4 +4,6 @@ function __decorateMetadata(k, v) {
   if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
-export { __decorateMetadata as default };
+(module.exports = __decorateMetadata),
+  (module.exports.__esModule = true),
+  (module.exports["default"] = module.exports);

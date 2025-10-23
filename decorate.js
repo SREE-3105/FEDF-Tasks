@@ -18,4 +18,6 @@ function __decorate(decorators, target, key, desc) {
   return c > 3 && r && Object.defineProperty(target, key, r), r;
 }
 
-export { __decorate as default };
+(module.exports = __decorate),
+  (module.exports.__esModule = true),
+  (module.exports["default"] = module.exports);
