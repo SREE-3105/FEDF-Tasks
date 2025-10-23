@@ -1,3 +1,2 @@
-export { Hfs } from "./hfs.js";
-export { Path } from "./path.js";
-export * from "./errors.js";
+export * from "./node-hfs.js";
+export { Hfs } from "@humanfs/core";
